@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <body>
+    <form method="POST" action="{% url 'sendPost:create_account' %}">
+      {% csrf_token %}
+      <label>ユーザーID</label>
+      <input name="userid">
+      <label>氏名</label>
+      <input name="username">
+      <label>メールアドレス</label>
+      <input name="email">
+      <label>プロフィール</label>
+      <input name="profile">
+      <label>パスワード</label>
+      <input name="password">
+      <button type = "submit">登録</button>
+    </form>
+  </body>
+</html>

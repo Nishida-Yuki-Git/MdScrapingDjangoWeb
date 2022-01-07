@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <body>
+    <form method="POST" action="{% url 'sendPost:login' %}">
+      {% csrf_token %}
+      <label>メールアドレス</label>
+      <input name="email">
+      <label>パスワード</label>
+      <input name="password">
+      <button type = "submit">ログイン</button>
+    </form>
+  </body>
+</html>
