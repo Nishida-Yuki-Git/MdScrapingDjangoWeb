@@ -1,2 +1,5 @@
 django
 django-heroku
+whitenoise
+django-bootstrap3
+gunicorn
