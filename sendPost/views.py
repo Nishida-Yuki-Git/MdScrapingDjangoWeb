@@ -43,7 +43,7 @@ class Create_account(CreateView):
 
 create_account = Create_account.as_view()
 
-#ログイン機能
+#ログイン
 class Account_login(View):
     def post(self, request, *arg, **kwargs):
         url = 'http://127.0.0.1:8000/login/'
