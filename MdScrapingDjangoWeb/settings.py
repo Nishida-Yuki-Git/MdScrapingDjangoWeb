@@ -123,5 +123,5 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-##herokuサーバー用(開発鯖で有効にすると動かないので注意)
+##herokuサーバー用(開発鯖で有効にすると動かないので注意すること)
 django_heroku.settings(locals())
