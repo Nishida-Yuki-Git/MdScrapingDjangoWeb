@@ -3,7 +3,9 @@ from . import views
 
 app_name = 'sendPost'
 urlpatterns = [
-    path('', views.IndexView, name='index'),
+    path('', views.indexView, name='index'),
+    path('results/', views.results, name='results'),
     path('create/', views.create_account, name='create_account'),
     path('login/', views.account_login, name='login'),
+    path('download/<int:result_file_num>/', views.download, name='download')
 ]

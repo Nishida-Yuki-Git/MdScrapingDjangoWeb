@@ -14,25 +14,16 @@ from pathlib import Path
 import os
 import django_heroku
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-##これが、デフォルトのBASE設定
+##↓これが、デフォルトのBASE設定
 ##BASE_DIR = Path(__file__).resolve().parent.parent
-##リモ鯖デプロイ用BASE
+##↓リモ鯖デプロイ用BASE
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-c64uj$v#uze(=q$!eql+wsdcnwbdt=-to#law06zsmbk*9vttf'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'sendPost.apps.SendpostConfig',
@@ -75,9 +66,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'MdScrapingDjangoWeb.wsgi.application'
 
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -93,10 +81,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Tokyo'
@@ -107,10 +91,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
-
 ##collectstatic用
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -118,10 +98,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ##herokuサーバー用(開発鯖で有効にすると動かないので注意すること)
-django_heroku.settings(locals())
+#django_heroku.settings(locals())

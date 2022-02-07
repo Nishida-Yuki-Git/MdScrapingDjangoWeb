@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="ja">
 
 <head>
@@ -8,8 +9,81 @@
 </head>
 
 <body>
+	<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
+
+	<p hidden id="token">{{ res_account_login.token }}</p>
+	<p hidden id="userid">{{ res_account_login.userid }}</p>
+
     <a href="{% url 'sendPost:login' %}">ログイン</a>
     <a href="{% url 'sendPost:create_account' %}">アカウント作成</a>
-</body>
 
+    {% if res_create_account.status_code == 0 %}
+      <span>アカウントが作成されました</span>
+    {% endif %}
+
+    {% if res_account_login.status_code == 0 %}
+      <span>ようこそ{{ res_account_login.userid }}さん</span>
+    {% elif res_account_login.status_code == 1 %}
+      <span>ユーザー初期データの取得に失敗しました</span>
+	{% endif %}
+
+    <h2>収集開始</h2>
+
+    <a href="{% url 'sendPost:index' %}">再読み込み</a>
+	<form id="main-form" action="{% url 'sendPost:results' %}" method="post">
+		{% csrf_token %}
+		<label>開始年</label>
+		<select name="start-year-select">
+			{% for year in res_account_login.user_input_item_list.year_field %}
+			<option>{{ year.year_param }}</option>
+			{% endfor %}
+		</select>
+		<label>終了年</label>
+		<select name="end-year-select">
+			{% for year in res_account_login.user_input_item_list.year_field %}
+			<option>{{ year.year_param }}</option>
+			{% endfor %}
+		</select>
+
+		<label>開始月</label>
+		<select name="start-month-select">
+			{% for month in res_account_login.user_input_item_list.month_field %}
+			<option>{{ month.month_param }}</option>
+			{% endfor %}
+		</select>
+		<label>終了月</label>
+		<select name="end-month-select">
+			{% for month in res_account_login.user_input_item_list.month_field %}
+			<option>{{ month.month_param }}</option>
+			{% endfor %}
+		</select>
+
+		<label>県</label>
+		<select name="ken-select" multiple size="8">
+			{% for ken in res_account_login.user_input_item_list.ken_field %}
+			<option>{{ ken.ken_name }}</option>
+			{% endfor %}
+		</select>
+		<label>気象データ項目</label>
+		<select name="md-item-select" multiple size="3">
+			{% for item in res_account_login.user_input_item_list.md_item_field %}
+			<option>{{ item.md_item }}</option>
+			{% endfor %}
+		</select>
+
+		<input id="go-btn" type="submit" value="Go">
+	</form>
+
+	<span id="main-fail-area"></span>
+
+	{% for result in res_account_login.user_process_result %}
+	    <span>{{ result.result_file_num }}</span>
+	    <span></span>
+	    <span>{{ result.user_id }}</span>
+	    <span></span>
+	    <span>{{ result.file_create_status }}</span>
+	    <br></br>
+	{% endfor %}
+</body>
 </html>
