@@ -23,7 +23,8 @@ SECRET_KEY = 'django-insecure-c64uj$v#uze(=q$!eql+wsdcnwbdt=-to#law06zsmbk*9vttf
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#全てを許可
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'sendPost.apps.SendpostConfig',
@@ -101,4 +102,4 @@ STATICFILES_DIRS = (
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ##herokuサーバー用(開発鯖で有効にすると動かないので注意すること)
-#django_heroku.settings(locals())
+django_heroku.settings(locals())
