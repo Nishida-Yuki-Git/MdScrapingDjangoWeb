@@ -47,6 +47,11 @@ $(document).ready(function() {
 
 function mainLogicSendData(formData) {
     var serverData = formData.serialize();
+    for (let i = 0; i < 50; i++) {
+        serverData = serverData.replace('ken-select=', 'ken-select' + i.toString(10) + '=');
+        serverData = serverData.replace('md-item-select=', 'md-item-select' + i.toString(10) + '=');
+    }
+
     var token = localStorage.getItem("token");
     var userid = localStorage.getItem("userid");
 
@@ -57,7 +62,6 @@ function mainLogicSendData(formData) {
 
     return serverData;
 }
-
 
 
 
