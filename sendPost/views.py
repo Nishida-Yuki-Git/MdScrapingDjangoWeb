@@ -9,7 +9,7 @@ from builtins import set
 ##アカウント作成view
 class Create_account(CreateView):
     def post(self, request, *args, **kwargs):
-        url = 'http://127.0.0.1:8000/account/register/'
+        url = 'http://10.108.1.120:80/account/register/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -49,7 +49,7 @@ create_account = Create_account.as_view()
 class Account_login(View):
     def post(self, request, *arg, **kwargs):
         #ログイン処理
-        url = 'http://127.0.0.1:8000/login/'
+        url = 'http://10.108.1.120:80/login/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -71,7 +71,7 @@ class Account_login(View):
             return render(request, 'sendPost/login.html', {'res_main': res_main})
 
         #認証チェック(ユーザーIDの取得)
-        url = 'http://127.0.0.1:8000/account/mypage/'
+        url = 'http://10.108.1.120:80/account/mypage/'
         req_header = {
             'Authorization': 'JWT '+token,
         }
@@ -96,7 +96,7 @@ class Account_login(View):
             return render(request, 'sendPost/login.html', {'res_main': res_main})
 
         #メインビジネス初期アクセス
-        url = 'http://127.0.0.1:8000/md-data/init/'
+        url = 'http://10.108.1.120:80/md-data/init/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -135,7 +135,7 @@ def indexView(request):
 ##メイン業務実行
 def results(request):
     ##認証チェック
-    url = 'http://127.0.0.1:8000/account/login-check/'
+    url = 'http://10.108.1.120:80/account/login-check/'
     req_header = {
         'Authorization': 'JWT '+request.POST['token'],
     }
@@ -159,7 +159,7 @@ def results(request):
         return render(request, 'sendPost/index.html', {'res_main': res_main})
 
     ##メイン業務実行
-    url = 'http://127.0.0.1:8000/md-data/main-logic/'
+    url = 'http://10.108.1.120:80/md-data/main-logic/'
     req_header = {
         'Content-Type': 'application/json',
     }
