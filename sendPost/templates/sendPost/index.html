@@ -89,6 +89,10 @@
 	    <span>{{ result.user_id }}</span>
 	    <span></span>
 	    <span>{{ result.file_create_status }}</span>
+	    {% if result.file_create_status == 'ファイル作成済み'  %}
+	    	<span>→</span>
+	        <a href="{% url 'sendPost:download' result.result_file_num %}">ダウンロード</a>
+	    {% endif %}
 	    <br></br>
 	{% endfor %}
 </body>

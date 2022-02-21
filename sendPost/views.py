@@ -4,7 +4,9 @@ from django.views import View
 import urllib.request
 import json
 import traceback
-from builtins import set
+import shutil
+from django.http import HttpResponse
+import mimetypes
 
 ##アカウント作成view
 class Create_account(CreateView):
@@ -49,7 +51,7 @@ create_account = Create_account.as_view()
 class Account_login(View):
     def post(self, request, *arg, **kwargs):
         #ログイン処理
-        url = 'http://10.108.1.120:80/login/'
+        url = 'http://127.0.0.1:8000/login/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -71,7 +73,7 @@ class Account_login(View):
             return render(request, 'sendPost/login.html', {'res_main': res_main})
 
         #認証チェック(ユーザーIDの取得)
-        url = 'http://10.108.1.120:80/account/mypage/'
+        url = 'http://127.0.0.1:8000/account/mypage/'
         req_header = {
             'Authorization': 'JWT '+token,
         }
@@ -96,7 +98,7 @@ class Account_login(View):
             return render(request, 'sendPost/login.html', {'res_main': res_main})
 
         #メインビジネス初期アクセス
-        url = 'http://10.108.1.120:80/md-data/init/'
+        url = 'http://127.0.0.1:8000/md-data/init/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -135,7 +137,7 @@ def indexView(request):
 ##メイン業務実行
 def results(request):
     ##認証チェック
-    url = 'http://10.108.1.120:80/account/login-check/'
+    url = 'http://127.0.0.1:8000/account/login-check/'
     req_header = {
         'Authorization': 'JWT '+request.POST['token'],
     }
@@ -159,7 +161,7 @@ def results(request):
         return render(request, 'sendPost/index.html', {'res_main': res_main})
 
     ##メイン業務実行
-    url = 'http://10.108.1.120:80/md-data/main-logic/'
+    url = 'http://127.0.0.1:8000/md-data/main-logic/'
     req_header = {
         'Content-Type': 'application/json',
     }
@@ -198,15 +200,27 @@ def results(request):
 
 ##ファイルダウンロード
 def download(request, result_file_num):
-    '''user_file = get_object_or_404(FileManageData, result_file_num=result_file_num)
-    file = user_file.create_file
-    name = file.name
+    #ログイン処理
+    url = 'http://127.0.0.1:8000/md-data/download/'
+    req_header = {
+        'Content-Type': 'application/json',
+    }
+    req_data = json.dumps({
+        'result_file_num': result_file_num,
+    })
 
-    response = HttpResponse(content_type=mimetypes.guess_type(name)[0] or 'application/octet-stream')
-    response['Content-Disposition'] = f'attachment; filename={name}'
-    shutil.copyfileobj(file, response)
+    req = urllib.request.Request(url, data=req_data.encode(), method='POST', headers=req_header)
+    try:
+        with urllib.request.urlopen(req) as response:
+            body = json.loads(response.read())
+    except:
+        traceback.print_exc()
+        res_main = {
+            'status_code': 1,
+        }
+        return render(request, 'sendPost/index.html', {'res_main': res_main})
 
-    return response'''
+    return body['file_response']
 
 
 ##県名リストの作成
