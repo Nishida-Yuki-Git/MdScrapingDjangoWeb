@@ -93,6 +93,10 @@
 	    	<span>→</span>
 	        <a href="{% url 'sendPost:download' result.result_file_num %}">ダウンロード</a>
 	    {% endif %}
+	    {% if result.file_create_status == 'エラー'  %}
+	    	<span>→</span>
+	        <a href="{% url 'sendPost:errorResult' result.result_file_num %}">再構築</a>
+	    {% endif %}
 	    <br></br>
 	{% endfor %}
 </body>

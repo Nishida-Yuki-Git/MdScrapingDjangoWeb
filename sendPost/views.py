@@ -7,11 +7,12 @@ import traceback
 import shutil
 from django.http import HttpResponse
 import mimetypes
+import glob
 
 ##アカウント作成view
 class Create_account(CreateView):
     def post(self, request, *args, **kwargs):
-        url = 'http://10.108.1.120:80/account/register/'
+        url = 'http://127.0.0.1:8000/account/register/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -198,6 +199,62 @@ def results(request):
     return render(request, 'sendPost/index.html', {'res_main': res_main})
 
 
+##エラーファイル再構成
+def errorResult(request, result_file_num):
+    ##認証チェック
+    url = 'http://127.0.0.1:8000/account/login-check/'
+    req_header = {
+        'Authorization': 'JWT '+request.POST['token'],
+    }
+    req_data = json.dumps({})
+
+    req = urllib.request.Request(url, data=req_data.encode(), method='GET', headers=req_header)
+    try:
+        with urllib.request.urlopen(req) as response:
+            body = json.loads(response.read())
+            res_main = {
+                'status_code': body['status_code'],
+            }
+            if res_main['status_code'] == 1:
+                res_main['status_code'] = 3
+                return render(request, 'sendPost/index.html', {'res_main': res_main})
+    except:
+        traceback.print_exc()
+        res_main = {
+            'status_code': 3,
+        }
+        return render(request, 'sendPost/index.html', {'res_main': res_main})
+
+    ##メイン業務実行
+    url = 'http://127.0.0.1:8000/md-data/error-request/'
+    req_header = {
+        'Content-Type': 'application/json',
+    }
+
+    req_data = json.dumps({
+        'result_file_num': result_file_num,
+    })
+
+    req = urllib.request.Request(url, data=req_data.encode(), method='POST', headers=req_header)
+    try:
+        with urllib.request.urlopen(req) as response:
+            body = json.loads(response.read())
+            res_main['user_input_item_list'] = body['user_input_item_list']
+            res_main['user_process_result'] = body['user_process_result']
+            res_main['status_code'] = body['status_code']
+    except:
+        traceback.print_exc()
+        res_main['status_code'] = 3
+
+    if res_main['status_code'] == 0:
+        res_main['status_code'] = 2
+    elif res_main['status_code'] == 3:
+        res_main = None
+        res_main['status_code'] = 3
+
+    return render(request, 'sendPost/index.html', {'res_main': res_main})
+
+
 ##ファイルダウンロード
 def download(request, result_file_num):
     #ログイン処理
@@ -220,7 +277,17 @@ def download(request, result_file_num):
         }
         return render(request, 'sendPost/index.html', {'res_main': res_main})
 
-    return body['file_response']
+    #以下の方式は使用しません(URLをクライアントにスルーするだけにするから)
+    file_url = body['file_url']
+    #user_file = urllib.request.urlretrieve(file_url, "sample.xlsx")
+    user_file = glob.glob(file_url)
+    file_name = "fhweifhwif.xlsx"
+
+    response = HttpResponse(content_type=mimetypes.guess_type(file_name)[0] or 'application/octet-stream')
+    response['Content-Disposition'] = f'attachment; filename={file_name}'
+    shutil.copyfileobj(user_file[0], response)
+
+    return response
 
 
 ##県名リストの作成
