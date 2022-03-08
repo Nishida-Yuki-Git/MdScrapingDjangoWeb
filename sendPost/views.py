@@ -12,7 +12,7 @@ import glob
 ##アカウント作成view
 class Create_account(CreateView):
     def post(self, request, *args, **kwargs):
-        url = 'http://117.102.204.252:8000/account/register/'
+        url = 'http://117.102.204.252:80/account/register/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -52,7 +52,7 @@ create_account = Create_account.as_view()
 class Account_login(View):
     def post(self, request, *arg, **kwargs):
         #ログイン処理
-        url = 'http://127.0.0.1:8000/login/'
+        url = 'http://117.102.204.252:80/login/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -74,7 +74,7 @@ class Account_login(View):
             return render(request, 'sendPost/login.html', {'res_main': res_main})
 
         #認証チェック(ユーザーIDの取得)
-        url = 'http://127.0.0.1:8000/account/mypage/'
+        url = 'http://117.102.204.252:80/account/mypage/'
         req_header = {
             'Authorization': 'JWT '+token,
         }
@@ -99,7 +99,7 @@ class Account_login(View):
             return render(request, 'sendPost/login.html', {'res_main': res_main})
 
         #メインビジネス初期アクセス
-        url = 'http://127.0.0.1:8000/md-data/init/'
+        url = 'http://117.102.204.252:80/md-data/init/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -138,7 +138,7 @@ def indexView(request):
 ##メイン業務実行
 def results(request):
     ##認証チェック
-    url = 'http://127.0.0.1:8000/account/login-check/'
+    url = 'http://117.102.204.252:80/account/login-check/'
     req_header = {
         'Authorization': 'JWT '+request.POST['token'],
     }
@@ -162,7 +162,7 @@ def results(request):
         return render(request, 'sendPost/index.html', {'res_main': res_main})
 
     ##メイン業務実行
-    url = 'http://127.0.0.1:8000/md-data/main-logic/'
+    url = 'http://117.102.204.252:80/md-data/main-logic/'
     req_header = {
         'Content-Type': 'application/json',
     }
@@ -202,7 +202,7 @@ def results(request):
 ##エラーファイル再構成
 def errorResult(request, result_file_num):
     ##認証チェック
-    url = 'http://127.0.0.1:8000/account/login-check/'
+    url = 'http://117.102.204.252:80/account/login-check/'
     req_header = {
         'Authorization': 'JWT '+request.POST['token'],
     }
@@ -226,7 +226,7 @@ def errorResult(request, result_file_num):
         return render(request, 'sendPost/index.html', {'res_main': res_main})
 
     ##メイン業務実行
-    url = 'http://127.0.0.1:8000/md-data/error-request/'
+    url = 'http://117.102.204.252:80/md-data/error-request/'
     req_header = {
         'Content-Type': 'application/json',
     }
@@ -257,7 +257,7 @@ def errorResult(request, result_file_num):
 
 ##ファイルダウンロード
 def download(request, result_file_num):
-    host_url = 'http://127.0.0.1:8000/'
+    host_url = 'http://117.102.204.252:80/'
     file_dir = 'meteorologicalDataScrapingApp/media/file/'
     file_name = str(result_file_num) + '.xlsx'
     get_file_url = host_url+file_dir+file_name
