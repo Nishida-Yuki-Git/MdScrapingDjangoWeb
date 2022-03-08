@@ -12,7 +12,7 @@ import glob
 ##アカウント作成view
 class Create_account(CreateView):
     def post(self, request, *args, **kwargs):
-        url = 'http://127.0.0.1:8000/account/register/'
+        url = 'http://117.102.204.252:8000/account/register/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -257,8 +257,21 @@ def errorResult(request, result_file_num):
 
 ##ファイルダウンロード
 def download(request, result_file_num):
+    host_url = 'http://127.0.0.1:8000/'
+    file_dir = 'meteorologicalDataScrapingApp/media/file/'
+    file_name = str(result_file_num) + '.xlsx'
+    get_file_url = host_url+file_dir+file_name
+
+    user_file = urllib.request.urlretrieve(get_file_url, file_name)
+
+    response = HttpResponse(content_type=mimetypes.guess_type(file_name)[0] or 'application/octet-stream')
+    response['Content-Disposition'] = f'attachment; filename={file_name}'
+    shutil.copyfileobj(user_file[0], response)
+
+    return response
+    '''
     #ログイン処理
-    url = 'http://127.0.0.1:8000/md-data/download/'
+    url = 'http://192.168.2.112:80/md-data/download/'
     req_header = {
         'Content-Type': 'application/json',
     }
@@ -288,6 +301,7 @@ def download(request, result_file_num):
     shutil.copyfileobj(user_file[0], response)
 
     return response
+    '''
 
 
 ##県名リストの作成
