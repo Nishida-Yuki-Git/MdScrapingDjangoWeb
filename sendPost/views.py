@@ -8,11 +8,13 @@ import shutil
 from django.http import HttpResponse
 import mimetypes
 import glob
+from MdScrapingDjangoWeb.apiUrlConfig import ApiUrlConfig
 
 ##アカウント作成view
 class Create_account(CreateView):
     def post(self, request, *args, **kwargs):
-        url = 'http://117.102.204.252:80/account/register/'
+        host = ApiUrlConfig().getApiUrl()
+        url = host+'/account/register/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -25,20 +27,20 @@ class Create_account(CreateView):
             'password': request.POST['password'],
         })
 
+        res_create_account = {
+            'status_code': None,
+        }
+
         req = urllib.request.Request(url, data=req_data.encode(), method='POST', headers=req_header)
         try:
             with urllib.request.urlopen(req) as response:
                 body = json.loads(response.read())
-                res_create_account = {
-                    'status_code': body['status_code'],
-                }
+                res_create_account['status_code'] = body['status_code']
                 if res_create_account['status_code'] == 1:
                     return render(request, 'sendPost/create.html', {'res_create_account': res_create_account})
         except:
             traceback.print_exc()
-            res_create_account = {
-                'status_code': 1,
-            }
+            res_create_account['status_code'] = 1
             return render(request, 'sendPost/create.html', {'res_create_account': res_create_account})
         return render(request, 'sendPost/index.html', {'res_create_account': res_create_account})
 
@@ -52,7 +54,8 @@ create_account = Create_account.as_view()
 class Account_login(View):
     def post(self, request, *arg, **kwargs):
         #ログイン処理
-        url = 'http://117.102.204.252:80/login/'
+        host = ApiUrlConfig().getApiUrl()
+        url = host+'/login/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -61,22 +64,28 @@ class Account_login(View):
             'password': request.POST['password'],
         })
 
+        res_main = {
+            'status_code': None,
+            'token': None,
+            'userid': None,
+            'user_input_item_list' : None,
+            'user_process_result' : None,
+        }
+
         req = urllib.request.Request(url, data=req_data.encode(), method='POST', headers=req_header)
         try:
             with urllib.request.urlopen(req) as response:
                 body = json.loads(response.read())
-                token  = body['token']
+                res_main['token'] = body['token']
         except:
             traceback.print_exc()
-            res_main = {
-                'status_code': 1,
-            }
+            res_main['status_code'] = 1
             return render(request, 'sendPost/login.html', {'res_main': res_main})
 
         #認証チェック(ユーザーIDの取得)
-        url = 'http://117.102.204.252:80/account/mypage/'
+        url = host+'/account/mypage/'
         req_header = {
-            'Authorization': 'JWT '+token,
+            'Authorization': 'JWT '+res_main['token'],
         }
         req_data = json.dumps({})
 
@@ -84,22 +93,17 @@ class Account_login(View):
         try:
             with urllib.request.urlopen(req) as response:
                 body = json.loads(response.read())
-                res_main = {
-                    'token': token,
-                    'userid': body['userid'],
-                    'status_code': body['status_code'],
-                }
+                res_main['userid'] = body['userid']
+                res_main['status_code'] = body['status_code']
                 if res_main['status_code'] == 1:
                     return render(request, 'sendPost/login.html', {'res_main': res_main})
         except:
             traceback.print_exc()
-            res_main = {
-                'status_code': 1,
-            }
+            res_main['status_code'] = 1
             return render(request, 'sendPost/login.html', {'res_main': res_main})
 
         #メインビジネス初期アクセス
-        url = 'http://117.102.204.252:80/md-data/init/'
+        url = host+'/md-data/init/'
         req_header = {
             'Content-Type': 'application/json',
         }
@@ -120,6 +124,9 @@ class Account_login(View):
 
         if res_main['status_code'] == 1:
             res_main = None
+            res_main = {
+                'status_code' : None,
+            }
             res_main['status_code'] = 1
 
         return render(request, 'sendPost/index.html', {'res_main': res_main})
@@ -138,31 +145,34 @@ def indexView(request):
 ##メイン業務実行
 def results(request):
     ##認証チェック
-    url = 'http://117.102.204.252:80/account/login-check/'
+    host = ApiUrlConfig().getApiUrl()
+    url = host+'/account/login-check/'
     req_header = {
         'Authorization': 'JWT '+request.POST['token'],
     }
     req_data = json.dumps({})
 
+    res_main = {
+        'status_code' : None,
+        'user_input_item_list' : None,
+        'user_process_result' : None,
+    }
+
     req = urllib.request.Request(url, data=req_data.encode(), method='GET', headers=req_header)
     try:
         with urllib.request.urlopen(req) as response:
             body = json.loads(response.read())
-            res_main = {
-                'status_code': body['status_code'],
-            }
+            res_main['status_code'] = body['status_code']
             if res_main['status_code'] == 1:
                 res_main['status_code'] = 3
                 return render(request, 'sendPost/index.html', {'res_main': res_main})
     except:
         traceback.print_exc()
-        res_main = {
-            'status_code': 3,
-        }
+        res_main['status_code'] = 3
         return render(request, 'sendPost/index.html', {'res_main': res_main})
 
     ##メイン業務実行
-    url = 'http://117.102.204.252:80/md-data/main-logic/'
+    url = host+'/md-data/main-logic/'
     req_header = {
         'Content-Type': 'application/json',
     }
@@ -194,6 +204,9 @@ def results(request):
         res_main['status_code'] = 2
     elif res_main['status_code'] == 3:
         res_main = None
+        res_main = {
+            'status_code' : None,
+        }
         res_main['status_code'] = 3
 
     return render(request, 'sendPost/index.html', {'res_main': res_main})
@@ -201,32 +214,9 @@ def results(request):
 
 ##エラーファイル再構成
 def errorResult(request, result_file_num):
-    ##認証チェック
-    url = 'http://117.102.204.252:80/account/login-check/'
-    req_header = {
-        'Authorization': 'JWT '+request.POST['token'],
-    }
-    req_data = json.dumps({})
-
-    req = urllib.request.Request(url, data=req_data.encode(), method='GET', headers=req_header)
-    try:
-        with urllib.request.urlopen(req) as response:
-            body = json.loads(response.read())
-            res_main = {
-                'status_code': body['status_code'],
-            }
-            if res_main['status_code'] == 1:
-                res_main['status_code'] = 3
-                return render(request, 'sendPost/index.html', {'res_main': res_main})
-    except:
-        traceback.print_exc()
-        res_main = {
-            'status_code': 3,
-        }
-        return render(request, 'sendPost/index.html', {'res_main': res_main})
-
     ##メイン業務実行
-    url = 'http://117.102.204.252:80/md-data/error-request/'
+    host = ApiUrlConfig().getApiUrl()
+    url = host+'/md-data/error-request/'
     req_header = {
         'Content-Type': 'application/json',
     }
@@ -234,6 +224,12 @@ def errorResult(request, result_file_num):
     req_data = json.dumps({
         'result_file_num': result_file_num,
     })
+
+    res_main = {
+        'status_code' : None,
+        'user_input_item_list' : None,
+        'user_process_result' : None,
+    }
 
     req = urllib.request.Request(url, data=req_data.encode(), method='POST', headers=req_header)
     try:
@@ -250,6 +246,9 @@ def errorResult(request, result_file_num):
         res_main['status_code'] = 2
     elif res_main['status_code'] == 3:
         res_main = None
+        res_main = {
+            'status_code' : None,
+        }
         res_main['status_code'] = 3
 
     return render(request, 'sendPost/index.html', {'res_main': res_main})
@@ -257,10 +256,10 @@ def errorResult(request, result_file_num):
 
 ##ファイルダウンロード
 def download(request, result_file_num):
-    host_url = 'http://117.102.204.252:80/'
-    file_dir = 'meteorologicalDataScrapingApp/media/file/'
+    host = ApiUrlConfig().getApiUrl()
+    file_dir = '/meteorologicalDataScrapingApp/media/file/'
     file_name = str(result_file_num) + '.xlsx'
-    get_file_url = host_url+file_dir+file_name
+    get_file_url = host+file_dir+file_name
 
     user_file = urllib.request.urlretrieve(get_file_url, file_name)
 
