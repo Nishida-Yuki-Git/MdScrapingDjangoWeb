@@ -137,8 +137,67 @@ class Account_login(View):
 account_login = Account_login.as_view()
 
 
-##再読み込み
+##初期読み込み
 def indexView(request):
+    return render(request, 'sendPost/index.html')
+
+
+##再読み込み
+def reView(request):
+    host = ApiUrlConfig().getApiUrl()
+
+    ##認証
+    url = host+'/account/mypage/'
+    req_header = {
+        'Authorization': 'JWT '+request.POST.get('token'),
+    }
+    req_data = json.dumps({})
+
+    res_main = {
+        'status_code': None,
+        'user_input_item_list' : None,
+        'user_process_result' : None,
+    }
+
+    req = urllib.request.Request(url, data=req_data.encode(), method='GET', headers=req_header)
+    try:
+        with urllib.request.urlopen(req) as response:
+            body = json.loads(response.read())
+            res_main['status_code'] = body['status_code']
+            if res_main['status_code'] == 1:
+                return render(request, 'sendPost/index.html', {'res_main': res_main})
+    except:
+        traceback.print_exc()
+        res_main['status_code'] = 1
+        return render(request, 'sendPost/index.html', {'res_main': res_main})
+
+    #メインビジネス初期アクセス
+    url = host+'/md-data/init/'
+    req_header = {
+        'Content-Type': 'application/json',
+    }
+    req_data = json.dumps({
+        'userid': request.POST['userid'],
+    })
+
+    req = urllib.request.Request(url, data=req_data.encode(), method='POST', headers=req_header)
+    try:
+        with urllib.request.urlopen(req) as response:
+            body = json.loads(response.read())
+            res_main['user_input_item_list'] = body['user_input_item_list']
+            res_main['user_process_result'] = body['user_process_result']
+            res_main['status_code'] = body['status_code']
+    except:
+        traceback.print_exc()
+        res_main['status_code'] = 1
+
+    if res_main['status_code'] == 1:
+        res_main = None
+        res_main = {
+            'status_code' : None,
+        }
+        res_main['status_code'] = 1
+
     return render(request, 'sendPost/index.html')
 
 

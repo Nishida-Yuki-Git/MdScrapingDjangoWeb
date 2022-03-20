@@ -43,6 +43,22 @@ $(document).ready(function() {
             });
         });
     });
+
+    $('body').on('click', '#re-view', function(){
+        var token = localStorage.getItem("token");
+        var userid = localStorage.getItem("userid");
+        $.post(
+            $("#re-view").prop("href"),
+            {
+                "token":token,
+                "userid":userid
+            },
+            function(dt){
+                var out_html = $($.parseHTML(dt));
+                $('body').html(out_html);
+            }
+        );
+    });
 });
 
 function mainLogicSendData(formData) {
@@ -62,10 +78,3 @@ function mainLogicSendData(formData) {
 
     return serverData;
 }
-
-
-
-
-
-
-

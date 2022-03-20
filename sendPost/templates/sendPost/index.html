@@ -36,7 +36,7 @@
 
     <h2>収集開始</h2>
 
-    <a href="{% url 'sendPost:index' %}">再読み込み</a>
+    <a id="re-view" href="{% url 'sendPost:reView' %}">再読み込み</a>
 	<form id="main-form" action="{% url 'sendPost:results' %}" method="post">
 		{% csrf_token %}
 		<label>開始年</label>
