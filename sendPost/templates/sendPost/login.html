@@ -2,23 +2,23 @@
 {% load static %}
 <html lang="ja">
   <head>
-    <title>気象データ収集システム</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>気象データ収集システム</title>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
+      <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+      <script src="{% static 'js/main.js' %}"></script>
 
-    <form id="login-form" method="POST" action="{% url 'sendPost:login' %}">
-      {% csrf_token %}
-      <label>メールアドレス</label>
-      <input type="text" name="email" />
-      <label>パスワード</label>
-      <input type="text" name="password" />
-      <input type="submit" id="login-btn" value="ログイン">
-    </form>
+      <form id="login-form" method="POST" action="{% url 'sendPost:login' %}">
+          {% csrf_token %}
+          <label>メールアドレス</label>
+          <input type="text" name="email" />
+          <label>パスワード</label>
+          <input type="text" name="password" />
+          <input type="submit" id="login-btn" value="ログイン">
+      </form>
 
-    <span id="login-fail-area"></span>
+      <span id="login-fail-area"></span>
   </body>
 </html>

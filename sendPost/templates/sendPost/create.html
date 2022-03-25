@@ -2,31 +2,31 @@
 {% load static %}
 <html lang="ja">
   <head>
-    <title>気象データ収集システム</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>気象データ収集システム</title>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
+      <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+      <script src="{% static 'js/main.js' %}"></script>
 
-    <form method="POST" action="{% url 'sendPost:create_account' %}">
-      {% csrf_token %}
-      <label>ユーザーID</label>
-      <input name="userid">
-      <label>氏名</label>
-      <input name="username">
-      <label>メールアドレス</label>
-      <input name="email">
-      <label>プロフィール</label>
-      <input name="profile">
-      <label>パスワード</label>
-      <input name="password">
-      <button type = "submit">登録</button>
-    </form>
+      <form method="POST" action="{% url 'sendPost:create_account' %}">
+          {% csrf_token %}
+          <label>ユーザーID</label>
+          <input name="userid">
+          <label>氏名</label>
+          <input name="username">
+          <label>メールアドレス</label>
+          <input name="email">
+          <label>プロフィール</label>
+          <input name="profile">
+          <label>パスワード</label>
+          <input name="password">
+          <button type = "submit">登録</button>
+      </form>
 
-    {% if res_create_account.status_code == 1 %}
-      <span>アカウント作成に失敗しました</span>
-    {% endif %}
+      {% if res_create_account.status_code == 1 %}
+          <span>アカウント作成に失敗しました</span>
+      {% endif %}
   </body>
 </html>

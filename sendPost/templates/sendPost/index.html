@@ -30,13 +30,16 @@
 
 	{% if res_main.status_code == 2 %}
       <span>メイン業務が実行されました</span>
+      {% if res_main.check_message != None %}
+      	<br></br>
+      	<span>入力値エラー：{{ res_main.check_message }}</span>
+      {% endif %}
     {% elif res_main.status_code == 3 %}
       <span>メイン業務で重大なエラーが発生しました</span>
 	{% endif %}
 
     <h2>収集開始</h2>
 
-    <a id="re-view" href="{% url 'sendPost:reView' %}">再読み込み</a>
 	<form id="main-form" action="{% url 'sendPost:results' %}" method="post">
 		{% csrf_token %}
 		<label>開始年</label>

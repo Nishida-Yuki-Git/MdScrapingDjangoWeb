@@ -12,8 +12,10 @@ $(document).ready(function() {
             })
             .done( function(data) {
                 var out_html = $($.parseHTML(data));
-                localStorage.setItem("token", out_html.filter('#token')[0].innerHTML);
-                localStorage.setItem("userid", out_html.filter('#userid')[0].innerHTML);
+                try {
+                    localStorage.setItem("token", out_html.filter('#token')[0].innerHTML);
+                    localStorage.setItem("userid", out_html.filter('#userid')[0].innerHTML);
+                } catch(error) {}
                 $('body').html(out_html);
             })
             .fail(function() {
@@ -42,22 +44,6 @@ $(document).ready(function() {
                 $('#main-fail-area').text('業務エラーです。');
             });
         });
-    });
-
-    $('body').on('click', '#re-view', function(){
-        var token = localStorage.getItem("token");
-        var userid = localStorage.getItem("userid");
-        $.post(
-            $("#re-view").prop("href"),
-            {
-                "token":token,
-                "userid":userid
-            },
-            function(dt){
-                var out_html = $($.parseHTML(dt));
-                $('body').html(out_html);
-            }
-        );
     });
 });
 
