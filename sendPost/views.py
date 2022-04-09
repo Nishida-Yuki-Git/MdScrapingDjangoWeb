@@ -4,11 +4,9 @@ from django.views import View
 import urllib.request
 import json
 import traceback
-import shutil
-from django.http import HttpResponse
-import mimetypes
-import glob
 from MdScrapingDjangoWeb.apiUrlConfig import ApiUrlConfig
+from http.client import HTTPSConnection, HTTPConnection
+
 
 ##アカウント作成view
 class Create_account(CreateView):
@@ -259,50 +257,21 @@ def errorResult(request, result_file_num):
 ##ファイルダウンロード
 def download(request, result_file_num):
     host = ApiUrlConfig().getApiUrl()
-    file_dir = '/meteorologicalDataScrapingApp/media/file/'
-    file_name = str(result_file_num) + '.xlsx'
-    get_file_url = host+file_dir+file_name
-
-    user_file = urllib.request.urlretrieve(get_file_url, file_name)
-
-    response = HttpResponse(content_type=mimetypes.guess_type(file_name)[0] or 'application/octet-stream')
-    response['Content-Disposition'] = f'attachment; filename={file_name}'
-    shutil.copyfileobj(user_file[0], response)
-
-    return response
-    '''
-    #ログイン処理
-    url = 'http://192.168.2.112:80/md-data/download/'
+    url = host+'/md-data/download/'
     req_header = {
         'Content-Type': 'application/json',
     }
+
     req_data = json.dumps({
-        'result_file_num': result_file_num,
+        'result_file_num': str(result_file_num),
     })
 
     req = urllib.request.Request(url, data=req_data.encode(), method='POST', headers=req_header)
     try:
         with urllib.request.urlopen(req) as response:
-            body = json.loads(response.read())
+            return response
     except:
-        traceback.print_exc()
-        res_main = {
-            'status_code': 1,
-        }
-        return render(request, 'sendPost/index.html', {'res_main': res_main})
-
-    #以下の方式は使用しません(URLをクライアントにスルーするだけにするから)
-    file_url = body['file_url']
-    #user_file = urllib.request.urlretrieve(file_url, "sample.xlsx")
-    user_file = glob.glob(file_url)
-    file_name = "fhweifhwif.xlsx"
-
-    response = HttpResponse(content_type=mimetypes.guess_type(file_name)[0] or 'application/octet-stream')
-    response['Content-Disposition'] = f'attachment; filename={file_name}'
-    shutil.copyfileobj(user_file[0], response)
-
-    return response
-    '''
+        return render(request, 'sendPost/index.html')
 
 
 ##県名リストの作成
