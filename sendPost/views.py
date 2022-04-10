@@ -5,7 +5,9 @@ import urllib.request
 import json
 import traceback
 from MdScrapingDjangoWeb.apiUrlConfig import ApiUrlConfig
-from http.client import HTTPSConnection, HTTPConnection
+import mimetypes
+from django.http import HttpResponse
+import shutil
 
 
 ##アカウント作成view
@@ -257,21 +259,29 @@ def errorResult(request, result_file_num):
 ##ファイルダウンロード
 def download(request, result_file_num):
     host = ApiUrlConfig().getApiUrl()
-    url = host+'/md-data/download/'
+    url = host+'/md-data/download/' + str(result_file_num) + '/'
     req_header = {
         'Content-Type': 'application/json',
     }
 
-    req_data = json.dumps({
-        'result_file_num': str(result_file_num),
-    })
+    req_data = json.dumps({})
+
+    user_file = None
 
     req = urllib.request.Request(url, data=req_data.encode(), method='POST', headers=req_header)
     try:
         with urllib.request.urlopen(req) as response:
-            return response
+            user_file = response
     except:
         return render(request, 'sendPost/index.html')
+
+    name = result_file_num + '.xlsx'
+
+    response = HttpResponse('application/octet-stream')
+    response['Content-Disposition'] = f'attachment; filename={name}'
+    shutil.copyfileobj(user_file, response)
+
+    return response
 
 
 ##県名リストの作成
