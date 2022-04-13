@@ -8,6 +8,8 @@ from MdScrapingDjangoWeb.apiUrlConfig import ApiUrlConfig
 import mimetypes
 from django.http import HttpResponse
 import shutil
+from pathlib import Path
+import os
 
 
 ##アカウント作成view
@@ -266,20 +268,34 @@ def download(request, result_file_num):
 
     req_data = json.dumps({})
 
-    user_file = None
+    byte_data_list = None
 
     req = urllib.request.Request(url, data=req_data.encode(), method='POST', headers=req_header)
     try:
         with urllib.request.urlopen(req) as response:
-            user_file = response
+            body = json.loads(response.read())
+            byte_data_list = body['byte_data_list']
     except:
         return render(request, 'sendPost/index.html')
 
-    name = result_file_num + '.xlsx'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    FILE_SAVE_DIR = '/file/'
+    name = str(result_file_num) + ".xlsx"
 
-    response = HttpResponse('application/octet-stream')
+    os.chdir(MEDIA_ROOT)
+    middle_save_path = MEDIA_ROOT + FILE_SAVE_DIR + str(result_file_num)
+    user_file = MEDIA_ROOT + FILE_SAVE_DIR + name
+
+    byte_data = bytes(byte_data_list)
+    with open(middle_save_path + ".xlsx", "wb") as f:
+        f.write(byte_data)
+
+    response = HttpResponse(content_type=mimetypes.guess_type(name)[0] or 'application/octet-stream')
     response['Content-Disposition'] = f'attachment; filename={name}'
-    shutil.copyfileobj(user_file, response)
+
+    with open(user_file, "rb") as f:
+        shutil.copyfileobj(f, response)
 
     return response
 
