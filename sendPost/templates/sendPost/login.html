@@ -5,20 +5,35 @@
       <title>気象データ収集システム</title>
 	    <meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="{% static 'css/login.css' %}">
   </head>
   <body>
+    <div class="login">
       <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
       <script src="{% static 'js/main.js' %}"></script>
 
+      <h1 class="login-ttl">Login</h1>
+
       <form id="login-form" method="POST" action="{% url 'sendPost:login' %}">
           {% csrf_token %}
-          <label>メールアドレス</label>
-          <input type="text" name="email" />
-          <label>パスワード</label>
-          <input type="text" name="password" />
-          <input type="submit" id="login-btn" value="ログイン">
+          <table class="contact-table">
+            <tr>
+              <th class="contact-item">メールアドレス</th>
+              <td class="contact-body">
+                <input type="text" name="email" class="form-text" />
+              </td>
+            </tr>
+            <tr>
+              <th class="contact-item">パスワード</th>
+              <td class="contact-body">
+                <input type="text" name="password" class="form-text" />
+              </td>
+            </tr>
+          </table>
+          <input type="submit" id="login-btn" class="contact-submit" value="ログイン">
       </form>
 
       <span id="login-fail-area"></span>
+    </div>
   </body>
 </html>

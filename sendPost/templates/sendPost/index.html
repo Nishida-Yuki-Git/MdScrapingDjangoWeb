@@ -6,17 +6,31 @@
     <title>気象データ収集システム</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="{% static 'css/index.css' %}">
 </head>
 
 <body>
+  <header>
 	<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 	<script src="{% static 'js/main.js' %}"></script>
 
+	<h1 class="headline">
+	  <a>気象データ明細出力</a>
+	</h1>
+	<ul class="nav-list">
+		<li class="nav-list-item">
+			<a href="{% url 'sendPost:login' %}">ログイン</a>
+		</li>
+		<li class="nav-list-item">
+			<a href="{% url 'sendPost:create_account' %}">アカウント作成</a>
+		</li>
+	</ul>
+  </header>
+
+  <div class="clear"></div>
+
 	<p hidden id="token">{{ res_main.token }}</p>
 	<p hidden id="userid">{{ res_main.userid }}</p>
-
-    <a href="{% url 'sendPost:login' %}">ログイン</a>
-    <a href="{% url 'sendPost:create_account' %}">アカウント作成</a>
 
     {% if res_create_account.status_code == 0 %}
       <span>アカウントが作成されました</span>
@@ -37,8 +51,6 @@
     {% elif res_main.status_code == 3 %}
       <span>メイン業務で重大なエラーが発生しました</span>
 	{% endif %}
-
-    <h2>収集開始</h2>
 
 	<form id="main-form" action="{% url 'sendPost:results' %}" method="post">
 		{% csrf_token %}
@@ -86,21 +98,41 @@
 
 	<span id="main-fail-area"></span>
 
-	{% for result in res_main.user_process_result.user_result_field %}
-	    <span>{{ result.result_file_num }}</span>
-	    <span></span>
-	    <span>{{ result.user_id }}</span>
-	    <span></span>
-	    <span>{{ result.file_create_status }}</span>
-	    {% if result.file_create_status == 'ファイル作成済み'  %}
-	    	<span>→</span>
-	        <a href="{% url 'sendPost:download' result.result_file_num %}">ダウンロード</a>
-	    {% endif %}
-	    {% if result.file_create_status == 'エラー'  %}
-	    	<span>→</span>
-	        <a href="{% url 'sendPost:errorResult' result.result_file_num %}">再構築</a>
-	    {% endif %}
-	    <br></br>
-	{% endfor %}
+  <div class="detail">
+	<h2 class="detail-ttl">結果</h2>
+
+	<table class="detail-table">
+	  <div class="table-leyout">
+	  	<div class="table-row">
+	  	  <p class="detail-item">ファイル番号</p>
+     	  <p class="detail-item">ユーザーID</p>
+     	  <p class="detail-item">ファイル作成ステータス</p>
+     	  <p class="detail-item">明細出力</p>
+   		</div>
+	  	
+	  	{% for result in res_main.user_process_result.user_result_field %}
+	  	<div class="table-row">
+     	  <span class="detail-body">{{ result.result_file_num }}</span>
+     	  <span class="detail-body">{{ result.user_id }}</span>
+     	  <span class="detail-body">{{ result.file_create_status }}</span>
+     	  {% if result.file_create_status == 'ファイル作成済み'  %}
+	        <a class="detail-body" href="{% url 'sendPost:download' result.result_file_num %}">ダウンロード</a>
+	      {% endif %}
+	      {% if result.file_create_status == 'エラー'  %}
+	        <a class="detail-body" href="{% url 'sendPost:errorResult' result.result_file_num %}">再構築</a>
+	      {% endif %}
+   		</div>
+	  	{% endfor %}
+
+	  	<div class="table-row">
+	  	  <p class="detail-item"></p>
+     	  <p class="detail-item"></p>
+     	  <p class="detail-item"></p>
+     	  <p class="detail-item"></p>
+   		</div>
+
+	  </div>
+	</table>
+
 </body>
 </html>

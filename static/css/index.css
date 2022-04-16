@@ -1,0 +1,76 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: #333;
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+}
+
+header {
+  height: 100px;
+  width: 100%;
+  padding: 15px 0;
+  background-color: #eee;
+  color: black;
+}
+header .headline{
+    line-height: 100px;
+    float: left;
+    font-size: 30px;
+    margin-left: 20px;
+}
+.nav-list {
+    line-height: 100px;
+    float: left;
+    margin-left: 30px;
+    list-style: none;
+}
+.nav-list-item {
+  list-style: none;
+  display: inline-block;
+  margin: 0 20px;
+}
+
+.clear {
+  clear:both
+}
+
+
+.detail {
+  width: 960px;/*横幅*/
+  margin: 0 auto;/*中央寄せ*/
+  padding: 60px 0;
+}
+.detail-ttl{
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 40px;
+  text-align: center;
+}
+.detail-table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.table-leyout {
+	display:table;
+}
+.table-row{
+  display: table-row;
+}
+
+.detail-item,
+.detail-body {
+	display:table-cell;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+.detail-item {
+    text-align: left;
+    width: 5%;
+    background-color: #eee;
+}
+.detail-body {
+    width: 10%;
+}
