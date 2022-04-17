@@ -3,7 +3,7 @@
 <html lang="ja">
 
 <head>
-    <title>気象データ収集システム</title>
+    <title>気象データ明細出力</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="{% static 'css/index.css' %}">
@@ -109,7 +109,7 @@
      	  <p class="detail-item">ファイル作成ステータス</p>
      	  <p class="detail-item">明細出力</p>
    		</div>
-	  	
+
 	  	{% for result in res_main.user_process_result.user_result_field %}
 	  	<div class="table-row">
      	  <span class="detail-body">{{ result.result_file_num }}</span>
