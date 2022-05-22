@@ -18,19 +18,19 @@
         {% csrf_token %}
         <table class="contact-table">
           <tr>
-            <th class="contact-item">ユーザーID</th>
+            <th class="contact-item">ユーザーID ※10文字以内</th>
             <td class="contact-body">
               <input name="userid" class="form-text">
             </td>
           </tr>
           <tr>
-            <th class="contact-item">氏名</th>
+            <th class="contact-item">氏名 ※30文字以内</th>
             <td class="contact-body">
               <input name="username" class="form-text">
             </td>
           </tr>
           <tr>
-            <th class="contact-item">メールアドレス</th>
+            <th class="contact-item">メールアドレス ※有効なEmail形式を入力</th>
             <td class="contact-body">
               <input name="email" class="form-text">
             </td>
