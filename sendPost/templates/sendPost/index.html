@@ -46,7 +46,7 @@
       <span>メイン業務が実行されました</span>
       {% if res_main.check_message != None %}
       	<br></br>
-      	<span>入力値エラー：{{ res_main.check_message }}</span>
+      	<span id="error-tag">入力値エラー：{{ res_main.check_message }}</span>
       {% endif %}
     {% elif res_main.status_code == 3 %}
       <span>メイン業務で重大なエラーが発生しました</span>

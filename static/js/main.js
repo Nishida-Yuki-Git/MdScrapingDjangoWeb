@@ -61,6 +61,7 @@ $(document).ready(function() {
             .done( function(data) {
                 var out_html = $($.parseHTML(data));
                 $('body').html(out_html);
+                $("body").find('#error-tag').hide();
             })
             .fail(function() {});
         });
