@@ -69,3 +69,26 @@ body {
   -moz-appearance: none;
   cursor: pointer;
 }
+
+
+@media screen and (max-width:960px){
+
+	.login,
+	.contact{
+    	width: 100%;
+	}
+	
+	.contact-item {
+		width: 100%;
+		display: block;
+	}
+	
+	.contact-body {
+		width: 100%;
+		display: block;
+	}
+	
+	
+	
+	
+}
