@@ -45,6 +45,26 @@ $(document).ready(function() {
             });
         });
     });
+
+    $('body').on('click', '#refresh-btn', function(){
+        $('#main-form').submit( function(event) {
+            event.preventDefault();
+            var form = $(this);
+            var serverData = mainLogicSendData(form);
+            $.ajax({
+                url: form.prop("action"),
+                method: form.prop("method"),
+                data: serverData,
+                timeout: 5000,
+                dataType: "html",
+            })
+            .done( function(data) {
+                var out_html = $($.parseHTML(data));
+                $('body').html(out_html);
+            })
+            .fail(function() {});
+        });
+    });
 });
 
 function mainLogicSendData(formData) {
