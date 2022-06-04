@@ -12,9 +12,25 @@ from pathlib import Path
 import os
 
 
-##アカウント作成view
 class Create_account(CreateView):
+    """ アカウント作成View
+    """
+
     def post(self, request, *args, **kwargs):
+        """
+        ユーザーアカウント作成を実行する
+
+        Parameters
+        ----------
+        request : HttpRequest
+            HttpRequestオブジェクト
+
+        Returns
+        ----------
+        django.shortcuts.render
+            HttpResponseオブジェクト
+        """
+
         host = ApiUrlConfig().getApiUrl()
         url = host+'/account/register/'
         req_header = {
@@ -47,15 +63,44 @@ class Create_account(CreateView):
         return render(request, 'sendPost/index.html', {'res_create_account': res_create_account})
 
     def get(self, request, *args, **kwargs):
+        """
+        アカウント作成ページの表示
+
+        Parameters
+        ----------
+        request : HttpRequest
+            HttpRequestオブジェクト
+
+        Returns
+        ----------
+        django.shortcuts.render
+            HttpResponseオブジェクト
+        """
+
         return render(request, 'sendPost/create.html')
 
 create_account = Create_account.as_view()
 
 
-##ログインview
 class Account_login(View):
+    """ ログインView
+    """
+
     def post(self, request, *arg, **kwargs):
-        #ログイン処理
+        """
+        ログイン処理を実行する
+
+        Parameters
+        ----------
+        request : HttpRequest
+            HttpRequestオブジェクト
+
+        Returns
+        ----------
+        django.shortcuts.render
+            HttpResponseオブジェクト
+        """
+
         host = ApiUrlConfig().getApiUrl()
         url = host+'/login/'
         req_header = {
@@ -84,7 +129,6 @@ class Account_login(View):
             res_main['status_code'] = 1
             return render(request, 'sendPost/login.html', {'res_main': res_main})
 
-        #認証チェック(ユーザーIDの取得)
         url = host+'/account/mypage/'
         req_header = {
             'Authorization': 'JWT '+res_main['token'],
@@ -104,7 +148,6 @@ class Account_login(View):
             res_main['status_code'] = 1
             return render(request, 'sendPost/login.html', {'res_main': res_main})
 
-        #メインビジネス初期アクセス
         url = host+'/md-data/init/'
         req_header = {
             'Content-Type': 'application/json',
@@ -134,19 +177,58 @@ class Account_login(View):
         return render(request, 'sendPost/index.html', {'res_main': res_main})
 
     def get(self, request, *args, **kwargs):
+        """
+        ログインページを表示する
+
+        Parameters
+        ----------
+        request : HttpRequest
+            HttpRequestオブジェクト
+
+        Returns
+        ----------
+        django.shortcuts.render
+            HttpResponseオブジェクト
+        """
+
         return render(request, 'sendPost/login.html')
 
 account_login = Account_login.as_view()
 
 
-##初期読み込み
 def indexView(request):
+    """
+    メインページの初期読み込み
+
+    Parameters
+    ----------
+    request : HttpRequest
+        HttpRequestオブジェクト
+
+    Returns
+    ----------
+    django.shortcuts.render
+        HttpResponseオブジェクト
+    """
+
     return render(request, 'sendPost/index.html')
 
 
-##メイン業務実行
 def results(request):
-    ##認証チェック
+    """
+    メイン業務実行
+
+    Parameters
+    ----------
+    request : HttpRequest
+        HttpRequestオブジェクト
+
+    Returns
+    ----------
+    django.shortcuts.render
+        HttpResponseオブジェクト
+    """
+
     host = ApiUrlConfig().getApiUrl()
     url = host+'/account/login-check/'
     req_header = {
@@ -174,7 +256,6 @@ def results(request):
         res_main['status_code'] = 3
         return render(request, 'sendPost/index.html', {'res_main': res_main})
 
-    ##メイン業務実行
     url = host+'/md-data/main-logic/'
     req_header = {
         'Content-Type': 'application/json',
@@ -216,9 +297,23 @@ def results(request):
     return render(request, 'sendPost/index.html', {'res_main': res_main})
 
 
-##エラーファイル再構成
 def errorResult(request, result_file_num):
-    ##メイン業務実行
+    """
+    エラーファイル再作成業務実行
+
+    Parameters
+    ----------
+    request : HttpRequest
+        HttpRequestオブジェクト
+    result_file_num : str
+        ファイル番号
+
+    Returns
+    ----------
+    django.shortcuts.render
+        HttpResponseオブジェクト
+    """
+
     host = ApiUrlConfig().getApiUrl()
     url = host+'/md-data/error-request/'
     req_header = {
@@ -258,8 +353,23 @@ def errorResult(request, result_file_num):
     return render(request, 'sendPost/index.html', {'res_main': res_main})
 
 
-##ファイルダウンロード
 def download(request, result_file_num):
+    """
+    ファイルダウンロード実行View
+
+    Parameters
+    ----------
+    request : HttpRequest
+        HttpRequestオブジェクト
+    result_file_num : str
+        ファイル番号
+
+    Returns
+    ----------
+    django.shortcuts.render
+        HttpResponseオブジェクト
+    """
+
     host = ApiUrlConfig().getApiUrl()
     url = host+'/md-data/download/' + str(result_file_num) + '/'
     req_header = {
@@ -300,8 +410,21 @@ def download(request, result_file_num):
     return response
 
 
-##県名リストの作成
 def setKenList(request):
+    """
+    県名リスト作成
+
+    Parameters
+    ----------
+    request : HttpRequest
+        HttpRequestオブジェクト
+
+    Returns
+    ----------
+    ken_req_list : list
+        県名リスト
+    """
+
     ken_req_list = []
     index = 0
     for i in range(50):
@@ -312,8 +435,22 @@ def setKenList(request):
             break
     return ken_req_list
 
-##気象項目リストの作成
+
 def setMdList(request):
+    """
+    気象データ項目リスト作成
+
+    Parameters
+    ----------
+    request : HttpRequest
+        HttpRequestオブジェクト
+
+    Returns
+    ----------
+    md_req_list : list
+        気象データ項目リスト
+    """
+
     md_req_list = []
     index = 0
     for i in range(5):
