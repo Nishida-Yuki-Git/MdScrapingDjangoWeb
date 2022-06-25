@@ -28,8 +28,10 @@ $ tree
 ```
  
 ## システムURL
-http://www.md-data.net/sendPost
- 
+http://www.md-data.net/sendPost 
+
+https://tranquil-meadow-43680.herokuapp.com/sendPost 
+(SSL認証がされているURLは上記になります。SSL認証URLのみアクセス可能な場合は上記からアクセスをお願いいたします。)
 
 ## その他システムの情報
 ・システムの処理概要  
