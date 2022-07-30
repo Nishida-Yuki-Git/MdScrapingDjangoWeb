@@ -116,7 +116,7 @@
      	  <span class="detail-body">{{ result.result_file_num }}</span>
      	  <span class="detail-body">{{ result.user_id }}</span>
      	  <span class="detail-body">{{ result.file_create_status }}</span>
-     	  {% if result.file_create_status == 'ファイル作成済み'  %}
+     	  {% if '済' in result.file_create_status %}
 	        <a class="detail-body" href="{% url 'sendPost:download' result.result_file_num %}">ダウンロード</a>
 	      {% endif %}
 	      {% if result.file_create_status == 'エラー'  %}
