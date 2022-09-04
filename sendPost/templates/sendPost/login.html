@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ja">
+  <head>
+      <title>気象データ明細出力</title>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  </head>
+  <body>
+    <div class="login">
+      <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+      <script src="{% static 'js/main.js' %}"></script>
+
+      <h1 class="login-ttl">Login</h1>
+
+      <form id="login-form" method="POST" action="{% url 'sendPost:login' %}">
+          {% csrf_token %}
+          <table class="contact-table">
+            <tr>
+              <th class="contact-item">メールアドレス</th>
+              <td class="contact-body">
+                <input type="text" name="email" class="form-text" />
+              </td>
+            </tr>
+            <tr>
+              <th class="contact-item">パスワード</th>
+              <td class="contact-body">
+                <input type="text" name="password" class="form-text" />
+              </td>
+            </tr>
+          </table>
+          <input type="submit" id="login-btn" class="contact-submit" value="ログイン">
+      </form>
+
+      <span id="login-fail-area"></span>
+    </div>
+  </body>
+</html>
