@@ -118,9 +118,10 @@
      	  <span class="detail-body">{{ result.file_create_status }}</span>
      	  {% if '済' in result.file_create_status %}
 	        <a class="detail-body" href="{% url 'sendPost:download' result.result_file_num %}">ダウンロード</a>
-	      {% endif %}
-	      {% if result.file_create_status == 'エラー'  %}
+	      {% elif result.file_create_status == 'エラー'  %}
 	        <a class="detail-body" href="{% url 'sendPost:errorResult' result.result_file_num %}">再構築</a>
+	      {% else %}
+	        <a class="detail-body" href="{% url 'sendPost:download' result.result_file_num %}">未完了</a>
 	      {% endif %}
    		</div>
 	  	{% endfor %}
