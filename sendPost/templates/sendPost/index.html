@@ -121,7 +121,7 @@
 	      {% elif result.file_create_status == 'エラー'  %}
 	        <a class="detail-body" href="{% url 'sendPost:errorResult' result.result_file_num %}">再構築</a>
 	      {% else %}
-	        <a class="detail-body" href="{% url 'sendPost:download' result.result_file_num %}">未完了</a>
+	        <span class="detail-body">未完了</span>
 	      {% endif %}
    		</div>
 	  	{% endfor %}
