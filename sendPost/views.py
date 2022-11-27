@@ -453,7 +453,7 @@ def setMdList(request):
 
     md_req_list = []
     index = 0
-    for i in range(5):
+    for i in range(50):
         try:
             md_req_list.append(request.POST['md-item-select' + str(index)])
             index += 1
