@@ -355,7 +355,7 @@ def errorResult(request, result_file_num):
 
 def download(request, result_file_num):
     """
-    ファイルダウンロード実行View
+    ファイルダウンロード実行
 
     Parameters
     ----------
