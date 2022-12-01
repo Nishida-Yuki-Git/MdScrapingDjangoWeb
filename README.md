@@ -25,4 +25,4 @@ $ tree
 ```
  
 ## システムURL
-http://www.md-data.net/sendPost
+https://www.md-data.net/sendPost
