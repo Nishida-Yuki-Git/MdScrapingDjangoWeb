@@ -18,13 +18,19 @@
           {% csrf_token %}
           <table class="contact-table">
             <tr>
-              <th class="contact-item">メールアドレス</th>
+              <th class="contact-item">
+                メールアドレス<br>
+                <font color="red">※アカウント作成時に入力したメールアドレス</font>
+              </th>
               <td class="contact-body">
                 <input type="text" name="email" class="form-text" />
               </td>
             </tr>
             <tr>
-              <th class="contact-item">パスワード</th>
+              <th class="contact-item">
+                パスワード<br>
+                <font color="red">※アカウント作成時に入力したパスワード</font>
+              </th>
               <td class="contact-body">
                 <input type="text" name="password" class="form-text" />
               </td>
