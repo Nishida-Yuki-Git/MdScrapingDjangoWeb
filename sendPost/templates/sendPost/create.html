@@ -18,7 +18,10 @@
         {% csrf_token %}
         <table class="contact-table">
           <tr>
-            <th class="contact-item">ユーザーID ※10文字以内</th>
+            <th class="contact-item">
+              <p>ユーザーID</p>
+              <p>※10文字以内(英数字のみ)</p>
+            </th>
             <td class="contact-body">
               <input name="userid" class="form-text">
             </td>
