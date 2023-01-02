@@ -32,6 +32,19 @@
 	<p hidden id="token">{{ res_main.token }}</p>
 	<p hidden id="userid">{{ res_main.userid }}</p>
 
+	<font color="red">
+	<h4>
+	  画面の初期表示時の状態では、本システムをご利用はできません
+	</h4>
+	</font>
+	<font color="red">
+	<h4>
+	  ①「アカウント作成」ボタンでアカウントの作成を実施<br>
+	  ②「ログイン」ボタンでログインを実施<br>
+	  上記の順番で画面を操作してください。
+	</h4>
+	</font>
+
     {% if res_create_account.status_code == 0 %}
       <span>アカウントが作成されました</span>
     {% endif %}
