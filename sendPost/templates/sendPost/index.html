@@ -17,10 +17,6 @@
 	<h1 class="headline">
 	  <a>気象データ明細出力</a>
 	</h1>
-	<h4 class="headline">
-	  ※ 本システムは毎日4:00にサーバーの再起動を実施いたします。<br>
-	  システム再起動中の場合は、一時的にご利用いただけません。
-	</h4>
 	<ul class="nav-list">
 		<li class="nav-list-item">
 			<a href="{% url 'sendPost:login' %}">ログイン</a>
@@ -36,6 +32,10 @@
 	<p hidden id="token">{{ res_main.token }}</p>
 	<p hidden id="userid">{{ res_main.userid }}</p>
 
+	<h4>
+	  ※ 本システムは毎日4:00にサーバーの再起動を実施いたします。<br>
+	  システム再起動中の場合は、一時的にご利用いただけません。
+	</h4>
 	<font color="red">
 	<h4>
 	  画面の初期表示時の状態では、本システムのご利用はできません
